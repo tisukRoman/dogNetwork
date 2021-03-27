@@ -1,0 +1,29 @@
+.menuOption{
+    width: 100%;
+    height: 100%;
+}
+
+.menuOption img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 5px solid black;
+    filter: brightness(50%);
+    cursor: pointer;
+    transition: 0.6s;
+}
+.menuOption img:hover{
+    filter: brightness(100%);
+}
+
+.menuOption .optionName{
+    text-align: center;
+    position: relative;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color:whitesmoke;
+    font-size: xx-large;
+    font-style: oblique;
+    text-decoration: none;
+}

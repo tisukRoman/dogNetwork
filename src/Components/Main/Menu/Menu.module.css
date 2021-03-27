@@ -1,0 +1,13 @@
+.menu{
+    height: 80vh;
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+}
+.menu .menu_links{
+    display: block;
+    width: 50%;
+    height: 50%;
+}

@@ -1,0 +1,16 @@
+.status{
+    width: 60%;
+    margin: 0 auto;
+}
+.status ul{
+    list-style-type: none;
+    text-align: left;
+    padding: 0;
+}
+.status ul li{
+    text-decoration: none;
+    color: white;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: left;
+    line-height: 2em;
+}
