@@ -5,7 +5,7 @@ import Aside from './Components/Aside/Aside';
 import Main from './Components/Main/Main';
 import PreloaderCSS from './Assets/prelouder';
 const Photos = React.lazy( () => import('./Components/Photos/Photos'));
-const Gifs  = React.lazy( () => import('./Components/Gifs/Gifs'));
+const Disliked  = React.lazy( () => import('./Components/Disliked/Disliked'));
 const Breeds  = React.lazy( () => import('./Components/Breeds/Breeds'));
 const Liked  = React.lazy( () => import('./Components/Liked/Liked'));
 
@@ -20,7 +20,7 @@ function App() {
         <React.Suspense fallback={<PreloaderCSS />}>
 
           <Route exact path="/photos" component={Photos}/>
-          <Route exact path="/gifs" component={Gifs}/>
+          <Route exact path="/disliked" component={Disliked}/>
           <Route exact path="/breeds" component={Breeds}/>
           <Route exact path="/liked" component={Liked}/>
           <Route exact path='/' component={Main}/>

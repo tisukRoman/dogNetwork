@@ -1,12 +1,13 @@
 import { requestDogs } from '../API/API';
-import { likeDogsFetch, dislikeDogsFetch, getSpecificImgFetch, deleteVoteFetch } from '../API/API'
+import { voteFetch, getSpecificImgFetch, deleteVoteFetch } from '../API/API'
 
 const GET_DOGS_PROPS = 'GET_DOGS_IMGS';
 const TOGGLE_FETCHING = 'IS_FETCHING';
 const CLEAR_DOGS_PROPS = 'CLEAR_DOGS_PROPS';
 const DELETE_VOTE = 'DELETE_VOTE';
-const SET_LIKED_DOGS = 'SET_LIKED_DOGS';
+const SET_DOGS_VOTED = 'SET_LIKED_DOGS';
 const DISPLAY_LIKED_DOGS_IDS = 'DISPLAY_LIKED_DOGS_IDS';
+const DISPLAY_DISLIKED_DOGS_IDS = 'DISPLAY_DISLIKED_DOGS_IDS';
 
 let initialState = {
     dogs: [],
@@ -32,7 +33,7 @@ export const photosReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: action.isFetching
             }
-        case SET_LIKED_DOGS:
+        case SET_DOGS_VOTED:
             return {
                 ...state,
                 dogs: [...state.dogs, action.item]
@@ -58,14 +59,21 @@ export const photosReducer = (state = initialState, action) => {
                 ...state,
                 likedDogsID: [...action.items]
             }
+        case DISPLAY_DISLIKED_DOGS_IDS:
+            return {
+                ...state,
+                dislikedDogsID: [...action.items]
+            }
         default:
             return state
     }
 }
 
 
-export const setLikedDogs = (item) => ({ type: SET_LIKED_DOGS, item });
+export const setVotedDogs = (item) => ({ type: SET_DOGS_VOTED, item });
+
 export const displayLikedDogsID = (items) => ({ type: DISPLAY_LIKED_DOGS_IDS, items });
+export const displayDislikedDogsID = (items) => ({ type: DISPLAY_DISLIKED_DOGS_IDS, items });
 export const delDogs = () => ({ type: CLEAR_DOGS_PROPS });
 export const deleteVote = (id) => ({ type: DELETE_VOTE, id });
 export const getDogs = (items) => ({ type: GET_DOGS_PROPS, items: items });
@@ -87,26 +95,36 @@ export const delDogsThunk = () => (dispatch) => {    // clearing 'dog' array
     dispatch(delDogs())
 }
 
-export const likeDogsThunk = (id) => (dispatch) => {  //setting in 'LocalStorage'  liked item
-    likeDogsFetch(id)
+export const voteThunk = (id, value) => (dispatch) => {  // voting and adding voted item's id to one of two arrs in LocalStorage
+    voteFetch(id, value)
         .then(() => {
-            addToLocalStore(id, 'likedDogsID');
-            dispatch(DisplayingLikedDogsThunk());
+            if (value === 1) {
+                addToLocalStore(id, 'likedDogsID');
+                dispatch(DisplayingVotesThunk(1));
+            } else {
+                addToLocalStore(id, 'dislikedDogsID');
+                dispatch(DisplayingVotesThunk(0));
+            }
         })
 }
 
-export const dislikeDogsThunk = (id) => (dispatch) => {  //setting in 'LocalStorage'  disliked item
-    dislikeDogsFetch(id)
-        .then(() => addToLocalStore(id, 'dislikedDogsID'))
-}
-
-export const DisplayingLikedDogsThunk = () => (dispatch) => {  //copying items in 'LikedDogsID' from 'LocalStorage' 
-    let arrString = localStorage.getItem('likedDogsID');
-    if (arrString === null) {
-        return true;
+export const DisplayingVotesThunk = (value) => (dispatch) => {  // if value===1 -> display LikedDogs; if value===0 -> display DislikedDogs
+    if (value === 1) {
+        let arrString = localStorage.getItem('likedDogsID');
+        if (arrString === null) {
+            return true;
+        } else {
+            let arr = JSON.parse(arrString);
+            dispatch(displayLikedDogsID(arr))
+        }
     } else {
-        let arr = JSON.parse(arrString);
-        dispatch(displayLikedDogsID(arr))
+        let arrString = localStorage.getItem('dislikedDogsID');
+        if (arrString === null) {
+            return true;
+        } else {
+            let arr = JSON.parse(arrString);
+            dispatch(displayDislikedDogsID(arr))
+        }
     }
 }
 
@@ -115,21 +133,36 @@ export const deleteVoteThunk = (id) => (dispatch) => {  //deleting specific item
     deleteVoteFetch(id)
         .then(() => {
             deleteStorageItem(id, 'likedDogsID');
-            dispatch(DisplayingLikedDogsThunk())
+            dispatch(DisplayingVotesThunk(1))
         })
 }
 
-export const setLikedDogsThunk = () => (dispatch) => {   //setting 'likedDogsIDs' from 'LocalStorage'  and  adding ITEMS to 'dogs'
-    let arrString = localStorage.getItem('likedDogsID');
-    let item = JSON.parse(arrString);
+export const setVotedDogsThunk = (value) => (dispatch) => {   //setting 'likedDogsIDs' or 'dislikedDogsIDs'  from 'LocalStorage'  and  adding ITEMS to 'dogs'
+    if (value === 1) {
+        let arrString = localStorage.getItem('likedDogsID');
+        let item = JSON.parse(arrString);
 
-    if (item === null) return;
-    item.map(el => {
-        getSpecificImgFetch(el)
-            .then(
-                data => dispatch(setLikedDogs(data))
-            )
-    });
+        if (item === null) return;
+        item.map(el => {
+            getSpecificImgFetch(el)
+                .then(
+                    data => dispatch(setVotedDogs(data))
+                )
+        });
+    }
+    else if (value === 0) {
+        let arrString = localStorage.getItem('dislikedDogsID');
+        let item = JSON.parse(arrString);
+
+        if (item === null) return;
+        item.map(el => {
+            getSpecificImgFetch(el)
+                .then(
+                    data => dispatch(setVotedDogs(data))
+                )
+        });
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////// additional functions below 

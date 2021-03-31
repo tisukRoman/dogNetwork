@@ -10,19 +10,19 @@ import {deleteVoteThunk, delDogsThunk, DisplayingVotesThunk, voteThunk, setVoted
 
 SwiperCore.use([Pagination]);
 
-const Liked = (props) => {
+const Disliked = (props) => {
   console.log(props)
 
   React.useEffect(()=>{
-    props.setVotedDogsThunk(1);
-    props.DisplayingVotesThunk(1);
+    props.setVotedDogsThunk(0);
+    props.DisplayingVotesThunk(0);
 
     return ()=>{props.delDogsThunk()}
   }, [])
 
     return (<div>
 
-        <h3 className={s.scroll_title}>Here are all the images you liked</h3>
+        <h3 className={s.scroll_title}>You don't like these dogs </h3>
         <div className={s.scroll}>
 
         <Swiper spaceBetween={20} slidesPerView={1} pagination={{ clickable: true }}>
@@ -33,8 +33,8 @@ const Liked = (props) => {
                         <img src={u.url} className={s.img} alt="ever" />
                         <div className={s.thumbs}>
                           
-                            <button className={s.thumbUp  + ' ' + (props.likedDogsID.some(elem=> elem === u.id)?s.thumbUpActive : '')} 
-                            onClick={ () => {props.likedDogsID.some(elem=> elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 1)}}>{"\uD83D\uDC4D"}</button> 
+                            <button className={s.thumbDown  + ' ' + (props.dislikedDogsID.some(elem=> elem === u.id)?s.thumbDownActive : '')} 
+                            onClick={ () => {props.dislikedDogsID.some(elem=> elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 0)}}>{"\uD83D\uDC4E"}</button> 
                         </div>
                     </div>
                 </SwiperSlide>))}
@@ -48,10 +48,10 @@ const Liked = (props) => {
 
 const mapStateToProps = (state) => ({
   dogs: state.photosReducer.dogs,
-  likedDogsID: state.photosReducer.likedDogsID.filter((elem)=>{
+  dislikedDogsID: state.photosReducer.dislikedDogsID.filter((elem)=>{
     if(elem === undefined) return false;
     return true
   }),
 });
 
-export default connect(mapStateToProps, {setVotedDogsThunk, deleteVoteThunk, delDogsThunk, DisplayingVotesThunk, voteThunk})(Liked)
+export default connect(mapStateToProps, {setVotedDogsThunk, deleteVoteThunk, delDogsThunk, DisplayingVotesThunk, voteThunk})(Disliked)

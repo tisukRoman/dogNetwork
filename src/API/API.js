@@ -2,38 +2,31 @@ import * as axios from 'axios'
 
 const instance = axios.create({
     baseURL: `https://api.thedogapi.com/v1/`,
+    withCredential: true,
     headers: {
-        'x-api-key': 'ccfb18ae-5643-4e2f-8ec6-15c535be28e0'
+        'x-api-key': '9d99b628-9eab-4317-bf3f-ab45852acad2'
     }
 })
 
 
 
-export const requestDogs = () => {
+export const requestDogs = () => {      // get 10 dog items
     return instance.get('images/search?limit=10')
         .then(response => response.data)
 }
 
-export const likeDogsFetch = (id) => {
+export const voteFetch = (id, value) => {   // if value===1 -> Like;  if value===0 -> Dislike
     return instance.post('votes', 
     {"image_id": id,
-    "value": 1})
+    "value": value})
         .then(response => response.data)
 }
 
-export const dislikeDogsFetch = (id) => {
-    return instance.post('votes', 
-    {"image_id": id,
-    "value": 0})
-        .then(response => response.data)
-}
-
-export const getSpecificImgFetch = (image_id) => {
+export const getSpecificImgFetch = (image_id) => {   // get one img with  specific ID
     return instance.get(`images/${image_id}`)
         .then(response => response.data)
 }
 
-export const deleteVoteFetch = (vote_id) => {
+export const deleteVoteFetch = (vote_id) => {   // 
     return instance.delete(`votes/${vote_id}`)
-        .then(response => response.data)
 }

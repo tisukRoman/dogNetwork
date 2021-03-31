@@ -5,7 +5,7 @@ import 'swiper/components/navigation/navigation.scss';
 import { connect } from 'react-redux';
 import SwiperCore, { Navigation } from 'swiper';
 import s from './PhotosSlider.module.css';
-import { getDogsThunk, delDogsThunk, likeDogsThunk, dislikeDogsThunk, deleteVoteThunk, DisplayingLikedDogsThunk } from '../../../Redux/photosReducer';
+import { getDogsThunk, delDogsThunk, deleteVoteThunk, DisplayingVotesThunk, voteThunk } from '../../../Redux/photosReducer';
 
 SwiperCore.use([Navigation]);
 
@@ -15,7 +15,8 @@ const PhotoSlider = (props) => {
 
     React.useEffect(() => {
         props.getDogsThunk();
-        props.DisplayingLikedDogsThunk();
+        props.DisplayingVotesThunk(1);
+        props.DisplayingVotesThunk(0);
 
         return () => {
             props.delDogsThunk();
@@ -35,10 +36,10 @@ const PhotoSlider = (props) => {
                         <img src={u.url} className={s.img} alt="ever" />
                         <div className={s.thumbs}>
                             <button className={s.thumbDown + ' ' + (props.dislikedDogsID.some(elem => elem === u.id) ? s.thumbDownActive : '')}
-                                onClick={() => { props.dislikedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.dislikeDogsThunk(u.id) }}>{"\uD83D\uDC4E"}</button>
+                                onClick={() => { props.dislikedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 0) }}>{"\uD83D\uDC4E"}</button>
 
                             <button className={s.thumbUp + ' ' + (props.likedDogsID.some(elem => elem === u.id) ? s.thumbUpActive : '')}
-                                onClick={() => { props.likedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.likeDogsThunk(u.id) }}>{"\uD83D\uDC4D"}</button>
+                                onClick={() => { props.likedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 1) }}>{"\uD83D\uDC4D"}</button>
                         </div>
                     </div>
                 </SwiperSlide>))}
@@ -61,4 +62,4 @@ const mapStateToProps = (state) => ({
     dislikedDogsID: state.photosReducer.dislikedDogsID,
 })
 
-export default connect(mapStateToProps, { getDogsThunk, delDogsThunk, likeDogsThunk, dislikeDogsThunk, deleteVoteThunk, DisplayingLikedDogsThunk })(PhotoSlider);
+export default connect(mapStateToProps, { getDogsThunk, delDogsThunk, deleteVoteThunk, DisplayingVotesThunk, voteThunk })(PhotoSlider);
