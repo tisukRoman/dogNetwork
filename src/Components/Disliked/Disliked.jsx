@@ -34,7 +34,7 @@ const Disliked = (props) => {
                         <div className={s.thumbs}>
                           
                             <button className={s.thumbDown  + ' ' + (props.dislikedDogsID.some(elem=> elem === u.id)?s.thumbDownActive : '')} 
-                            onClick={ () => {props.dislikedDogsID.some(elem=> elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 0)}}>{"\uD83D\uDC4E"}</button> 
+                            onClick={ () => {props.dislikedDogsID.some(elem=> elem === u.id) ? props.deleteVoteThunk(u.id, 0) : props.voteThunk(u.id, 0)}}>{"\uD83D\uDC4E"}</button> 
                         </div>
                     </div>
                 </SwiperSlide>))}

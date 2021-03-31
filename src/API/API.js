@@ -18,8 +18,9 @@ export const requestDogs = () => {      // get 10 dog items
 export const voteFetch = (id, value) => {   // if value===1 -> Like;  if value===0 -> Dislike
     return instance.post('votes', 
     {"image_id": id,
+    "sub_id": 'tisukroman@gmail.com',
     "value": value})
-        .then(response => response.data)
+    .then(response => response.data)
 }
 
 export const getSpecificImgFetch = (image_id) => {   // get one img with  specific ID
@@ -27,6 +28,3 @@ export const getSpecificImgFetch = (image_id) => {   // get one img with  specif
         .then(response => response.data)
 }
 
-export const deleteVoteFetch = (vote_id) => {   // 
-    return instance.delete(`votes/${vote_id}`)
-}

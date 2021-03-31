@@ -36,10 +36,10 @@ const PhotoSlider = (props) => {
                         <img src={u.url} className={s.img} alt="ever" />
                         <div className={s.thumbs}>
                             <button className={s.thumbDown + ' ' + (props.dislikedDogsID.some(elem => elem === u.id) ? s.thumbDownActive : '')}
-                                onClick={() => { props.dislikedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 0) }}>{"\uD83D\uDC4E"}</button>
+                                onClick={() => { props.dislikedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id, 0) : props.voteThunk(u.id, 0) }}>{"\uD83D\uDC4E"}</button>
 
                             <button className={s.thumbUp + ' ' + (props.likedDogsID.some(elem => elem === u.id) ? s.thumbUpActive : '')}
-                                onClick={() => { props.likedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id) : props.voteThunk(u.id, 1) }}>{"\uD83D\uDC4D"}</button>
+                                onClick={() => { props.likedDogsID.some(elem => elem === u.id) ? props.deleteVoteThunk(u.id, 1) : props.voteThunk(u.id, 1) }}>{"\uD83D\uDC4D"}</button>
                         </div>
                     </div>
                 </SwiperSlide>))}

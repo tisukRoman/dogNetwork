@@ -1,5 +1,5 @@
 import { requestDogs } from '../API/API';
-import { voteFetch, getSpecificImgFetch, deleteVoteFetch } from '../API/API'
+import { voteFetch, getSpecificImgFetch } from '../API/API'
 
 const GET_DOGS_PROPS = 'GET_DOGS_IMGS';
 const TOGGLE_FETCHING = 'IS_FETCHING';
@@ -128,13 +128,17 @@ export const DisplayingVotesThunk = (value) => (dispatch) => {  // if value===1 
     }
 }
 
-export const deleteVoteThunk = (id) => (dispatch) => {  //deleting specific item from 'likedDogsID' or 'dislikedDogsID' 
+export const deleteVoteThunk = (id, value) => (dispatch) => {  //deleting specific dog's ID from LocalStorage
 
-    deleteVoteFetch(id)
-        .then(() => {
-            deleteStorageItem(id, 'likedDogsID');
-            dispatch(DisplayingVotesThunk(1))
-        })
+    if (value === 1) {
+        deleteStorageItem(id, 'likedDogsID');
+        dispatch(DisplayingVotesThunk(1));
+        alert('hello');
+    } else if (value === 0) {
+        deleteStorageItem(id, 'dislikedDogsID');
+        dispatch(DisplayingVotesThunk(0))
+    }
+
 }
 
 export const setVotedDogsThunk = (value) => (dispatch) => {   //setting 'likedDogsIDs' or 'dislikedDogsIDs'  from 'LocalStorage'  and  adding ITEMS to 'dogs'
@@ -165,6 +169,8 @@ export const setVotedDogsThunk = (value) => (dispatch) => {   //setting 'likedDo
 
 }
 
+
+
 ////////////////////////////////////////////////////////////////////////// additional functions below 
 
 function addToLocalStore(id, list) {
@@ -186,8 +192,8 @@ function deleteStorageItem(id, list) {
     } else {
         localStorage.removeItem(list)
         let arr = JSON.parse(arrString);
-        arr.filter(el => {
-            if (el === id) { return false };
+        arr = arr.filter(el => {
+            if (el === id) return false;
             return true;
         });
         arr = JSON.stringify(arr);
