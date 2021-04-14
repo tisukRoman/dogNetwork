@@ -1,0 +1,16 @@
+.empty_img{
+    height: 28em;
+    position: relative;
+}
+
+.empty_img img{
+    display: block; 
+    max-height: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.empty_header{
+    text-align: center;
+}

@@ -2,3 +2,9 @@
     width: 60%;
     margin: 10em auto;
 }
+
+.loginLink{
+    color: cornsilk;
+    font-size: xx-large;
+    text-decoration: none;
+}

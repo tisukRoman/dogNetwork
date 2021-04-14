@@ -12,6 +12,7 @@
 }
 
 .scroll .slide{
+    position: relative;
     height: 30em;
     width: 30em;
     background-color: #B4F8C8;
@@ -84,4 +85,8 @@
 }
 .fetch_button:hover{
     transform: scale(1.2);
+}
+
+input[type="file"]{
+    display: none;
 }

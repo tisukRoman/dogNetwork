@@ -6,25 +6,23 @@ import 'swiper/components/navigation/navigation.scss';
 import { connect } from 'react-redux';
 import SwiperCore, { Navigation } from 'swiper';
 import s from '../Photos/PhotoSlider/PhotosSlider.module.css';
-import { clearDogsThunk, createVoteThunk,  setLikedDogsThunk, setAllVotesIdThunk } from '../../Redux/photosReducer';
+import { clearDogsThunk, createVoteThunk, setAllVotesIdThunk, uploadImgThunk, setUploadedItemsThunk } from '../../Redux/photosReducer';
 import { withLoginRedirect } from '../../HOC/withRedirect'
 import PreloaderCSS from '../../Assets/Prelouder'
-import NoItems from '../NoItems/NoItems'
+import NoItems from '../NoItems/NoItems';
 
 
 SwiperCore.use([Navigation]);
 
 
 
-const Liked = (props) => {
+const Upload = (props) => {
 
   const [preloader, setPreloader] = React.useState(0);
 
-
   React.useEffect(() => {
-    props.setLikedDogsThunk(props.likedDogsId);
+    props.setUploadedItemsThunk(props.uploadedId);
     setTimeout(() => { setPreloader(1) }, 2000);
-
     return () => {
       props.clearDogsThunk();
     }
@@ -32,13 +30,21 @@ const Liked = (props) => {
   }, [])
 
 
+  const UploadImg = async (e) => {
+    if (e.target.files.length) {
+      const file = e.target.files[0];
+      props.uploadImgThunk(file, props.uid);
+    }
+  }
+
 
 
   return (<div сlassName={s.wrapper}>
 
-    <h3 className={s.scroll_title}>Here you have all your Liked items ❤️ </h3>
+    <h3 className={s.scroll_title}>Here you can post your doggy 🐶 </h3>
 
-    {props.dogs.length ? (<div className={s.scroll}>
+
+    {props.dogs.length? (<div className={s.scroll}>
       <Swiper
         spaceBetween={20}
         slidesPerView={1}
@@ -48,28 +54,42 @@ const Liked = (props) => {
         {props.dogs.map(u => (<SwiperSlide key={u.id}>
           <div className={s.slide}>
             {(preloader === 0) ? <PreloaderCSS /> : null}
-            <div className={s.label}>{u.breeds? u.breeds.map(r => r.name) : null}</div>
+            <div className={s.label}>{u.breeds ? u.breeds.map(r => r.name) : null}</div>
             <img src={u.url} className={s.img} alt="ever" />
             <div className={s.thumbs}>
+              <button className={s.thumbDown + ' ' + (props.dislikedDogsId.some(elem => elem === u.id) ? s.thumbDownActive : '')}
+                onClick={() => { props.dislikedDogsId.some(elem => elem === u.id) ? console.log('you disliked it') : props.createVoteThunk(u.id, 0, props.uid) }}>{"\uD83D\uDC4E"}</button>
+
               <button className={s.thumbUp + ' ' + (props.likedDogsId.some(elem => elem === u.id) ? s.thumbUpActive : '')}
                 onClick={() => { props.likedDogsId.some(elem => elem === u.id) ? console.log('you liked it') : props.createVoteThunk(u.id, 1, props.uid) }}>{"\uD83D\uDC4D"}</button>
             </div>
+
           </div>
         </SwiperSlide>))}
 
       </Swiper>
     </div>) : <NoItems/>}
 
+
+    <div className={s.fetch_button} >
+      <input type={"file"} onChange={UploadImg} accept={"image/*"} id={"file"} />
+      <label for="file">Post a dog photo 📷</label>
+    </div>
+
+
   </div>)
 }
 
 const mapStateToProps = (state) => ({
   dogs: state.photosReducer.dogs,
+  uid: state.authReducer.userId,
+  uploadedId: state.photosReducer.uploadedId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
   likedDogsId: state.photosReducer.likedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
-  uid: state.authReducer.userId
+  dislikedDogsId: state.photosReducer.dislikedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
+  votesId: state.photosReducer.votesId,
 })
 
 export default compose(
-   withLoginRedirect,
-  connect(mapStateToProps, { clearDogsThunk, createVoteThunk, setLikedDogsThunk, setAllVotesIdThunk })
-)(Liked)
+  withLoginRedirect,
+  connect(mapStateToProps, { clearDogsThunk, createVoteThunk, setAllVotesIdThunk, uploadImgThunk, setUploadedItemsThunk })
+)(Upload)

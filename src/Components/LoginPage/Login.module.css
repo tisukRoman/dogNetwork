@@ -1,0 +1,47 @@
+.form{
+    display: flex;
+    flex-direction: column;
+}
+
+.field{
+    display: block;
+    width: 20em;
+    margin: 0.5em auto;
+    text-align: start;
+}
+
+.input{
+    width: 100%;
+    border-radius: 0.5em;
+}
+
+.error{
+    color: red;
+}
+
+.button{
+    width: 15em;
+    height: 3em;
+    margin: 2em auto;
+    border-radius: 1em;
+    background-color: rgb(255, 255, 115);
+    transition: 0.5s;
+    cursor: pointer;
+}
+.button:hover{
+    transform: scale(1.2);
+}
+.googleButton{
+    background-color: #4CD7D0;
+}
+
+.header{
+    width: 15em;
+    margin: 5em auto 0 auto;
+    text-align: center;
+}
+
+.checkbox{
+    width: 10%;
+    text-align: center;
+}

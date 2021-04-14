@@ -1,19 +1,26 @@
-import { requestDogs } from '../API/API';
-import { voteFetch, getSpecificImgFetch } from '../API/API'
+import { requestDogs, voteFetch, deleteVote, getVotes, getspecificImg, uploadImg, getUploadedImgs, deleteUploaded } from '../API/API';
 
 const GET_DOGS_PROPS = 'GET_DOGS_IMGS';
-const TOGGLE_FETCHING = 'IS_FETCHING';
 const CLEAR_DOGS_PROPS = 'CLEAR_DOGS_PROPS';
-const DELETE_VOTE = 'DELETE_VOTE';
-const SET_DOGS_VOTED = 'SET_LIKED_DOGS';
-const DISPLAY_LIKED_DOGS_IDS = 'DISPLAY_LIKED_DOGS_IDS';
-const DISPLAY_DISLIKED_DOGS_IDS = 'DISPLAY_DISLIKED_DOGS_IDS';
+const DISPLAY_LIKES = 'DISPLAY_LIKES';
+const DISPLAY_DISLIKES = 'DISPLAY_DISLIKES';
+const ADD_LIKE = 'ADD_LIKE';
+const ADD_DISLIKE = 'ADD_DISLIKE';
+const SET_LIKES = 'SET_LIKES';
+const SET_DISLIKES = 'SET_DISLIKES';
+const SET_ALL_VOTES = 'SET_ALL_VOTES';
+const CLEAR_CASH = 'CLEAR_CASH';
+const DISPLAY_UPLOADED = 'DISPLAY_UPLOADED';
+const SET_UPLOADED = 'SET_UPLOADED';
+const ADD_UPLOADED = 'ADD_UPLOADED';
+
 
 let initialState = {
     dogs: [],
-    likedDogsID: [],
-    dislikedDogsID: [],
-    isFetching: false
+    likedDogsId: [],
+    dislikedDogsId: [],
+    votesId: [],
+    uploadedId: []
 }
 
 export const photosReducer = (state = initialState, action) => {
@@ -21,159 +28,201 @@ export const photosReducer = (state = initialState, action) => {
         case GET_DOGS_PROPS:
             return {
                 ...state,
-                dogs: [...state.dogs, ...action.items]
+                dogs: [...state.dogs, ...action.data]
             }
         case CLEAR_DOGS_PROPS:
             return {
                 ...state,
                 dogs: []
             }
-        case TOGGLE_FETCHING:
+        case DISPLAY_LIKES:
             return {
                 ...state,
-                isFetching: action.isFetching
+                likedDogsId: [...state.likedDogsId, action.id]
             }
-        case SET_DOGS_VOTED:
+        case DISPLAY_DISLIKES:
+            return {
+                ...state,
+                dislikedDogsId: [...state.dislikedDogsId, action.id]
+            }
+        case ADD_LIKE:
+            return {
+                ...state,
+                likedDogsId: [...state.likedDogsId, action.id]
+            }
+        case ADD_DISLIKE:
+            return {
+                ...state,
+                dislikedDogsId: [...state.dislikedDogsId, action.id]
+            }
+        case SET_LIKES:
             return {
                 ...state,
                 dogs: [...state.dogs, action.item]
             }
-        case DELETE_VOTE:
+        case SET_DISLIKES:
             return {
                 ...state,
-                likedDogsID: [...state.likedDogsID.filter(
-                    elem => {
-                        if (elem === action.id) { return false }
-                        return true
-                    }
-                )],
-                dislikedDogsID: [...state.dislikedDogsID.filter(
-                    elem => {
-                        if (elem === action.id) { return false }
-                        return true
-                    }
-                )]
+                dogs: [...state.dogs, action.item]
             }
-        case DISPLAY_LIKED_DOGS_IDS:
+        case SET_ALL_VOTES:
             return {
                 ...state,
-                likedDogsID: [...action.items]
+                votesId: [...state.votesId, action.id]
             }
-        case DISPLAY_DISLIKED_DOGS_IDS:
+        case CLEAR_CASH:
             return {
                 ...state,
-                dislikedDogsID: [...action.items]
+                likedDogsId: [],
+                dislikedDogsId: [],
+                uploadedId: []
+            }
+        case DISPLAY_UPLOADED:
+            return {
+                ...state,
+                uploadedId: [...state.uploadedId, action.id]
+            }
+        case SET_UPLOADED:
+            return {
+                ...state,
+                dogs: [...state.dogs, action.item]
+            }
+        case ADD_UPLOADED:
+            return {
+                ...state,
+                uploadedId: [...state.uploadedId, action.id]
             }
         default:
             return state
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////// Action creators below
 
-export const setVotedDogs = (item) => ({ type: SET_DOGS_VOTED, item });
+export const getDogs = (data) => ({ type: GET_DOGS_PROPS, data }); // fills 'dogs' array
+export const delDogs = () => ({ type: CLEAR_DOGS_PROPS });  // clears 'dogs' array
 
-export const displayLikedDogsID = (items) => ({ type: DISPLAY_LIKED_DOGS_IDS, items });
-export const displayDislikedDogsID = (items) => ({ type: DISPLAY_DISLIKED_DOGS_IDS, items });
-export const delDogs = () => ({ type: CLEAR_DOGS_PROPS });
-export const deleteVote = (id) => ({ type: DELETE_VOTE, id });
-export const getDogs = (items) => ({ type: GET_DOGS_PROPS, items: items });
-export const toggleFetching = (isFetching) => ({ type: TOGGLE_FETCHING, isFetching })
+export const setLikes = (id) => ({ type: DISPLAY_LIKES, id });  // fills 'likedDogsId' array
+export const setDisikes = (id) => ({ type: DISPLAY_DISLIKES, id });  // fills 'dislikedDogsId' array
+
+export const addLike = (id) => ({ type: ADD_LIKE, id });  //adds one id to 'likedDogsId' array
+export const addDislike = (id) => ({ type: ADD_DISLIKE, id });  //adds one id to 'dislikedDogsId' array
+
+export const setLikedItems = (item) => ({ type: SET_LIKES, item });  //adds one liked item to 'dogs' array 
+export const setDislikedItems = (item) => ({ type: SET_DISLIKES, item });  //adds one disliked item to 'dogs' array
+
+export const setVotes = (id) => ({ type: SET_ALL_VOTES, id }); // fills 'votesId' array
+export const clearCash = () => ({ type: CLEAR_CASH }); // clears 'likedDogsId' and 'dislikedDogsId' arrays
+
+export const displayUploaded = (id) => ({ type: DISPLAY_UPLOADED, id }) // fills 'uploadedId' array
+export const setUploadedItems = (item) => ({ type: SET_UPLOADED, item });  //adds one uploaded item to 'dogs' array
+export const addUploaded = (id) => ({ type: ADD_UPLOADED, id });  //adds one uploaded item to 'uploadedId' array
 
 
-////////////////////////////////////////////////////////////////////////// Thunks below 
+///////////////////////////////////////////////////////////////////////////////////////// Thunks below 
 
-export const getDogsThunk = () => (dispatch) => {   //fetching random items and adding to 'dogs'
-    dispatch(toggleFetching(true));
-    requestDogs()
-        .then(
-            data => dispatch(getDogs(data))
-        );
-    dispatch(toggleFetching(false));
+
+export const getDogsThunk = () => async (dispatch) => {   //fetching 10 random items and adding to 'dogs'
+
+    let data = await requestDogs();
+    dispatch(getDogs(data));
 }
 
-export const delDogsThunk = () => (dispatch) => {    // clearing 'dog' array
+export const clearDogsThunk = () => (dispatch) => {    // clearing 'dog' array
     dispatch(delDogs())
 }
 
-export const voteThunk = (id, value) => (dispatch) => {  // voting and adding voted item's id to one of two arrs in LocalStorage
-    voteFetch(id, value)
-        .then(() => {
-            if (value === 1) {
-                addToLocalStore(id, 'likedDogsID');
-                dispatch(DisplayingVotesThunk(1));
-            } else {
-                addToLocalStore(id, 'dislikedDogsID');
-                dispatch(DisplayingVotesThunk(0));
-            }
-        })
-}
+export const createVoteThunk = (img_id, value, sub_id) => async (dispatch) => {   // create a vote in account (value=1 -> Like ; value=0 -> disLike) and adds its ID in likedDogsId or dislikedDogsId array
+    await voteFetch(img_id, value, sub_id);
 
-export const DisplayingVotesThunk = (value) => (dispatch) => {  // if value===1 -> display LikedDogs; if value===0 -> display DislikedDogs
-    if (value === 1) {
-        let arrString = localStorage.getItem('likedDogsID');
-        if (arrString === null) {
-            return true;
-        } else {
-            let arr = JSON.parse(arrString);
-            dispatch(displayLikedDogsID(arr))
-        }
+    if (value) {
+        dispatch(addLike(img_id));
     } else {
-        let arrString = localStorage.getItem('dislikedDogsID');
-        if (arrString === null) {
-            return true;
-        } else {
-            let arr = JSON.parse(arrString);
-            dispatch(displayDislikedDogsID(arr))
+        dispatch(addDislike(img_id));
+    }
+}
+
+export const clearCashThunk = (votesId, uploadedId) => async (dispatch) => {   // delete all votes in one function 
+
+    votesId.map(
+        el => { deleteVote(el) }
+    );
+    uploadedId.map(
+        el => { deleteUploaded(el) }
+    );
+    dispatch(clearCash());
+}
+
+export const displayLikesThunk = (sub_id) => async (dispatch) => {  // fills 'likedDogsId' with likedDogs id
+    let data = await getVotes(sub_id);
+
+    data.map(
+        el => {
+            if (el.value === 1) dispatch(setLikes(el.image_id))
         }
-    }
+    )
 }
 
-export const deleteVoteThunk = (id, value) => (dispatch) => {  //deleting specific dog's ID from LocalStorage
+export const displayDislikesThunk = (sub_id) => async (dispatch) => {  // fills 'dislikedDogsId' with dislikedDogs id
+    let data = await getVotes(sub_id);
 
-    if (value === 1) {
-        deleteStorageItem(id, 'likedDogsID');
-        dispatch(DisplayingVotesThunk(1));
-        alert('hello');
-    } else if (value === 0) {
-        deleteStorageItem(id, 'dislikedDogsID');
-        dispatch(DisplayingVotesThunk(0))
-    }
-
+    data.map(
+        el => {
+            if (el.value === 0) dispatch(setDisikes(el.image_id))
+        }
+    )
 }
 
-export const setVotedDogsThunk = (value) => (dispatch) => {   //setting 'likedDogsIDs' or 'dislikedDogsIDs'  from 'LocalStorage'  and  adding ITEMS to 'dogs'
-    if (value === 1) {
-        let arrString = localStorage.getItem('likedDogsID');
-        let item = JSON.parse(arrString);
+export const setLikedDogsThunk = (likedDogsId) => (dispatch) => {  // fills 'dogs' with liked items
 
-        if (item === null) return;
-        item.map(el => {
-            getSpecificImgFetch(el)
-                .then(
-                    data => dispatch(setVotedDogs(data))
-                )
-        });
-    }
-    else if (value === 0) {
-        let arrString = localStorage.getItem('dislikedDogsID');
-        let item = JSON.parse(arrString);
+    likedDogsId.map(async (el) => {
+        let data = await getspecificImg(el);
+        dispatch(setLikedItems(data));
+    })
+}
 
-        if (item === null) return;
-        item.map(el => {
-            getSpecificImgFetch(el)
-                .then(
-                    data => dispatch(setVotedDogs(data))
-                )
-        });
-    }
+export const setDislikedDogsThunk = (dislikedDogsId) => (dispatch) => {  // fills 'dogs' with disliked items
 
+    dislikedDogsId.map(async (el) => {
+        let data = await getspecificImg(el);
+        dispatch(setDislikedItems(data));
+    })
+}
+
+export const setAllVotesIdThunk = (sub_id) => async (dispatch) => {  // fills 'votesId' array 
+    let data = await getVotes(sub_id);
+
+    data.map(
+        el => {
+            dispatch(setVotes(el.id))
+        }
+    )
+}
+
+export const uploadImgThunk = (file, sub_id) => async (dispatch) => {
+    let data = await uploadImg(file, sub_id);
+    dispatch(addUploaded(data.id));
+}
+
+export const getUploadedThunk = (sub_id) => async (dispatch) => { // fills 'uploadedId' array 
+    let data = await getUploadedImgs(sub_id);
+    data.map(
+        el => dispatch(displayUploaded(el.id))
+    )
+}
+
+export const setUploadedItemsThunk = (uploadedId) => (dispatch) => { // fills 'dogs' with uploaded items
+    uploadedId.map(async (el) => {
+        let data = await getspecificImg(el);
+        dispatch(setUploadedItems(data));
+    })
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////// additional functions below 
 
-function addToLocalStore(id, list) {
+/* function addToLocalStore(id, list) {
     let arrString = localStorage.getItem(list);
     if (arrString === null) {
         localStorage.setItem(list, JSON.stringify([id]))
@@ -199,4 +248,4 @@ function deleteStorageItem(id, list) {
         arr = JSON.stringify(arr);
         localStorage.setItem(list, arr);
     }
-}
+} */
