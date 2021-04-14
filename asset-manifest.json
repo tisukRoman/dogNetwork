@@ -4,14 +4,14 @@
     "static/js/0.b6268daa.chunk.js": "/dogNetwork/static/js/0.b6268daa.chunk.js",
     "static/js/0.b6268daa.chunk.js.map": "/dogNetwork/static/js/0.b6268daa.chunk.js.map",
     "main.css": "/dogNetwork/static/css/main.49cb6db7.chunk.css",
-    "main.js": "/dogNetwork/static/js/main.93fcaad8.chunk.js",
-    "main.js.map": "/dogNetwork/static/js/main.93fcaad8.chunk.js.map",
+    "main.js": "/dogNetwork/static/js/main.ac155916.chunk.js",
+    "main.js.map": "/dogNetwork/static/js/main.ac155916.chunk.js.map",
     "runtime-main.js": "/dogNetwork/static/js/runtime-main.efe8b7ea.js",
     "runtime-main.js.map": "/dogNetwork/static/js/runtime-main.efe8b7ea.js.map",
     "static/js/3.3ded228b.chunk.js": "/dogNetwork/static/js/3.3ded228b.chunk.js",
     "static/js/3.3ded228b.chunk.js.map": "/dogNetwork/static/js/3.3ded228b.chunk.js.map",
-    "static/js/4.e9834bb0.chunk.js": "/dogNetwork/static/js/4.e9834bb0.chunk.js",
-    "static/js/4.e9834bb0.chunk.js.map": "/dogNetwork/static/js/4.e9834bb0.chunk.js.map",
+    "static/js/4.48be9faa.chunk.js": "/dogNetwork/static/js/4.48be9faa.chunk.js",
+    "static/js/4.48be9faa.chunk.js.map": "/dogNetwork/static/js/4.48be9faa.chunk.js.map",
     "static/css/5.cc4ef57d.chunk.css": "/dogNetwork/static/css/5.cc4ef57d.chunk.css",
     "static/js/5.766fdde1.chunk.js": "/dogNetwork/static/js/5.766fdde1.chunk.js",
     "static/js/5.766fdde1.chunk.js.map": "/dogNetwork/static/js/5.766fdde1.chunk.js.map",
@@ -35,14 +35,14 @@
     "static/css/8.df62c8b4.chunk.css.map": "/dogNetwork/static/css/8.df62c8b4.chunk.css.map",
     "static/css/9.5fdc0bae.chunk.css.map": "/dogNetwork/static/css/9.5fdc0bae.chunk.css.map",
     "static/css/main.49cb6db7.chunk.css.map": "/dogNetwork/static/css/main.49cb6db7.chunk.css.map",
-    "static/js/4.e9834bb0.chunk.js.LICENSE.txt": "/dogNetwork/static/js/4.e9834bb0.chunk.js.LICENSE.txt",
+    "static/js/4.48be9faa.chunk.js.LICENSE.txt": "/dogNetwork/static/js/4.48be9faa.chunk.js.LICENSE.txt",
     "static/media/avatar.17df8b8c.png": "/dogNetwork/static/media/avatar.17df8b8c.png",
     "static/media/empty.002bb8b3.gif": "/dogNetwork/static/media/empty.002bb8b3.gif"
   },
   "entrypoints": [
     "static/js/runtime-main.efe8b7ea.js",
-    "static/js/4.e9834bb0.chunk.js",
+    "static/js/4.48be9faa.chunk.js",
     "static/css/main.49cb6db7.chunk.css",
-    "static/js/main.93fcaad8.chunk.js"
+    "static/js/main.ac155916.chunk.js"
   ]
 }
