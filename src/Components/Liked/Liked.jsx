@@ -10,6 +10,7 @@ import { clearDogsThunk, createVoteThunk,  setLikedDogsThunk, setAllVotesIdThunk
 import { withLoginRedirect } from '../../HOC/withRedirect'
 import PreloaderCSS from '../../Assets/Prelouder'
 import NoItems from '../NoItems/NoItems'
+import {withErrorHandle} from '../../HOC/withErrorHandle'
 
 
 SwiperCore.use([Navigation]);
@@ -52,7 +53,7 @@ const Liked = (props) => {
             <img src={u.url} className={s.img} alt="ever" />
             <div className={s.thumbs}>
               <button className={s.thumbUp + ' ' + (props.likedDogsId.some(elem => elem === u.id) ? s.thumbUpActive : '')}
-                onClick={() => { props.likedDogsId.some(elem => elem === u.id) ? console.log('you liked it') : props.createVoteThunk(u.id, 1, props.uid) }}>{"\uD83D\uDC4D"}</button>
+                onClick={() => { props.likedDogsId.some(elem => elem === u.id) ? console.log('you liked') : props.createVoteThunk(u.id, 1, props.uid) }}>{"\uD83D\uDC4D"}</button>
             </div>
           </div>
         </SwiperSlide>))}
@@ -71,5 +72,6 @@ const mapStateToProps = (state) => ({
 
 export default compose(
    withLoginRedirect,
+   withErrorHandle,
   connect(mapStateToProps, { clearDogsThunk, createVoteThunk, setLikedDogsThunk, setAllVotesIdThunk })
 )(Liked)

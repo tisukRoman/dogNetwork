@@ -13,15 +13,18 @@ const CLEAR_CASH = 'CLEAR_CASH';
 const DISPLAY_UPLOADED = 'DISPLAY_UPLOADED';
 const SET_UPLOADED = 'SET_UPLOADED';
 const ADD_UPLOADED = 'ADD_UPLOADED';
-
+const DISPLAY_ERROR = 'DISPLAY_ERROR';
+const CLEAR_ERROR = 'CLEAR_ERROR';
 
 let initialState = {
     dogs: [],
     likedDogsId: [],
     dislikedDogsId: [],
     votesId: [],
-    uploadedId: []
+    uploadedId: [],
+    currentError: null
 }
+
 
 export const photosReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -92,6 +95,16 @@ export const photosReducer = (state = initialState, action) => {
                 ...state,
                 uploadedId: [...state.uploadedId, action.id]
             }
+        case DISPLAY_ERROR:
+            return {
+                ...state,
+                currentError: action.error
+            }
+        case CLEAR_ERROR:
+            return {
+                ...state,
+                currentError: null
+            }
         default:
             return state
     }
@@ -118,14 +131,19 @@ export const displayUploaded = (id) => ({ type: DISPLAY_UPLOADED, id }) // fills
 export const setUploadedItems = (item) => ({ type: SET_UPLOADED, item });  //adds one uploaded item to 'dogs' array
 export const addUploaded = (id) => ({ type: ADD_UPLOADED, id });  //adds one uploaded item to 'uploadedId' array
 
+export const displayError = (error) => ({ type: DISPLAY_ERROR, error });  //displays message of 'currentError'
+export const clearError = () => ({ type: CLEAR_ERROR });  //displays message of 'currentError'
 
 ///////////////////////////////////////////////////////////////////////////////////////// Thunks below 
 
 
 export const getDogsThunk = () => async (dispatch) => {   //fetching 10 random items and adding to 'dogs'
-
-    let data = await requestDogs();
-    dispatch(getDogs(data));
+    try {
+        let data = await requestDogs();
+        dispatch(getDogs(data));
+    } catch (error) {
+        dispatch(displayError(error.message))
+    }
 }
 
 export const clearDogsThunk = () => (dispatch) => {    // clearing 'dog' array
@@ -133,92 +151,120 @@ export const clearDogsThunk = () => (dispatch) => {    // clearing 'dog' array
 }
 
 export const createVoteThunk = (img_id, value, sub_id) => async (dispatch) => {   // create a vote in account (value=1 -> Like ; value=0 -> disLike) and adds its ID in likedDogsId or dislikedDogsId array
-    await voteFetch(img_id, value, sub_id);
 
-    if (value) {
-        dispatch(addLike(img_id));
-    } else {
-        dispatch(addDislike(img_id));
+    try {
+        await voteFetch(img_id, value, sub_id);
+        if (value) dispatch(addLike(img_id));
+        else dispatch(addDislike(img_id));
+    }
+    catch (error) {
+        dispatch(displayError(error.message))
     }
 }
 
 export const clearCashThunk = (votesId, uploadedId) => async (dispatch) => {   // delete all votes in one function 
 
-    votesId.map(
-        el => { deleteVote(el) }
-    );
-    uploadedId.map(
-        el => { deleteUploaded(el) }
-    );
+    votesId.map(el => deleteVote(el));
+    uploadedId.map(el => deleteUploaded(el));
     dispatch(clearCash());
+
 }
 
 export const displayLikesThunk = (sub_id) => async (dispatch) => {  // fills 'likedDogsId' with likedDogs id
-    let data = await getVotes(sub_id);
 
-    data.map(
-        el => {
-            if (el.value === 1) dispatch(setLikes(el.image_id))
-        }
-    )
+    try {
+        let data = await getVotes(sub_id);
+        data.map(el => { if (el.value === 1) dispatch(setLikes(el.image_id)) })
+    }
+    catch (error) {
+        dispatch(displayError(error.message))
+    }
 }
 
 export const displayDislikesThunk = (sub_id) => async (dispatch) => {  // fills 'dislikedDogsId' with dislikedDogs id
-    let data = await getVotes(sub_id);
 
-    data.map(
-        el => {
-            if (el.value === 0) dispatch(setDisikes(el.image_id))
-        }
-    )
+    try {
+        let data = await getVotes(sub_id);
+        data.map(el => { if (el.value === 0) dispatch(setDisikes(el.image_id)) })
+    }
+    catch (error) {
+        dispatch(displayError(error.message))
+    }
 }
 
 export const setLikedDogsThunk = (likedDogsId) => (dispatch) => {  // fills 'dogs' with liked items
 
     likedDogsId.map(async (el) => {
-        let data = await getspecificImg(el);
-        dispatch(setLikedItems(data));
+        try {
+            let data = await getspecificImg(el);
+            dispatch(setLikedItems(data));
+        } catch (error) {
+            dispatch(displayError(error.message));
+        }
     })
 }
 
 export const setDislikedDogsThunk = (dislikedDogsId) => (dispatch) => {  // fills 'dogs' with disliked items
 
     dislikedDogsId.map(async (el) => {
-        let data = await getspecificImg(el);
-        dispatch(setDislikedItems(data));
+        try {
+            let data = await getspecificImg(el);
+            dispatch(setDislikedItems(data));
+        } catch (error) {
+            dispatch(displayError(error.message))
+        }
     })
 }
 
 export const setAllVotesIdThunk = (sub_id) => async (dispatch) => {  // fills 'votesId' array 
-    let data = await getVotes(sub_id);
 
-    data.map(
-        el => {
-            dispatch(setVotes(el.id))
-        }
-    )
+    try {
+        let data = await getVotes(sub_id);
+        data.map(el => { dispatch(setVotes(el.id)) })
+    }
+    catch (error) {
+        dispatch(displayError(error.message))
+    }
 }
 
-export const uploadImgThunk = (file, sub_id) => async (dispatch) => {
-    let data = await uploadImg(file, sub_id);
-    dispatch(addUploaded(data.id));
+export const uploadImgThunk = (file, sub_id) => async (dispatch) => {  // send img to server
+    try {
+        let response = await uploadImg(file, sub_id);
+        dispatch(addUploaded(response.data.id));
+    } catch (error) {
+        dispatch(displayError(error.message));
+    }
+
 }
 
 export const getUploadedThunk = (sub_id) => async (dispatch) => { // fills 'uploadedId' array 
-    let data = await getUploadedImgs(sub_id);
-    data.map(
-        el => dispatch(displayUploaded(el.id))
-    )
+
+    try {
+        let data = await getUploadedImgs(sub_id);
+        data.map(el => dispatch(displayUploaded(el.id)))
+
+    }
+    catch (error) {
+        dispatch(displayError(error.message))
+    }
 }
 
 export const setUploadedItemsThunk = (uploadedId) => (dispatch) => { // fills 'dogs' with uploaded items
+
     uploadedId.map(async (el) => {
-        let data = await getspecificImg(el);
-        dispatch(setUploadedItems(data));
+        try {
+            let data = await getspecificImg(el);
+            dispatch(setUploadedItems(data));
+        } catch (error) {
+            dispatch(displayError(error.message));
+        }
     })
+
 }
 
-
+export const clearErrorThunk = () => (dispatch) => { // sets 'null' in 'currentError'
+    dispatch(clearError())
+}
 
 ////////////////////////////////////////////////////////////////////////// additional functions below 
 

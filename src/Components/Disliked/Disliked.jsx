@@ -10,6 +10,7 @@ import { clearDogsThunk, createVoteThunk,  setDislikedDogsThunk, setAllVotesIdTh
 import { withLoginRedirect } from '../../HOC/withRedirect'
 import PreloaderCSS from '../../Assets/Prelouder'
 import NoItems from '../NoItems/NoItems'
+import {withErrorHandle} from '../../HOC/withErrorHandle'
 
 
 SwiperCore.use([Navigation]);
@@ -72,5 +73,6 @@ const mapStateToProps = (state) => ({
 
 export default compose(
    withLoginRedirect,
+   withErrorHandle,
   connect(mapStateToProps, { clearDogsThunk, createVoteThunk, setDislikedDogsThunk, setAllVotesIdThunk })
 )(Disliked)

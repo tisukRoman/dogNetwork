@@ -54,7 +54,6 @@ export const uploadImg = (file, sub_id) => {
             'Content-Type': 'multipart/form-data' 
         }
     })
-    .then(response => response.data)
 }
 
 

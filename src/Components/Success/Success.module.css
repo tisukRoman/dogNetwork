@@ -1,0 +1,38 @@
+.successBlock{
+    margin: 0 auto;
+    max-width: 100%;
+    position: relative;
+    transform: scale(0.6);
+}
+
+.successImg img{
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.successImg h3{
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, 0);
+    font-size: xx-large;
+}
+
+.successOk{
+    border-radius: 0.5em;
+    border:1px solid black;
+    margin: 5em auto;
+    line-height: 2em;
+    text-align: center;
+    background-color: #F8EA8C;
+    transform: scale(1.8);
+    cursor: pointer;
+    width: 40%;
+    transition: 0.5s;
+}
+.successOk:hover{
+    transform: scale(2);
+}

@@ -89,4 +89,5 @@
 
 input[type="file"]{
     display: none;
+    cursor: pointer;
 }

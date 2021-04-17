@@ -9,6 +9,7 @@ import s from './PhotosSlider.module.css';
 import { getDogsThunk, clearDogsThunk, createVoteThunk} from '../../../Redux/photosReducer';
 import { withLoginRedirect } from '../../../HOC/withRedirect'
 import PreloaderCSS from '../../../Assets/Prelouder'
+import {withErrorHandle} from '../../../HOC/withErrorHandle'
 
 
 SwiperCore.use([Navigation]);
@@ -79,6 +80,7 @@ const mapStateToProps = (state) => ({
 
 export default compose(
     withLoginRedirect,
+    withErrorHandle,
     connect(mapStateToProps, { getDogsThunk, clearDogsThunk, createVoteThunk})
 )(PhotoSlider)
 

@@ -10,31 +10,39 @@ import { clearDogsThunk, createVoteThunk, setAllVotesIdThunk, uploadImgThunk, se
 import { withLoginRedirect } from '../../HOC/withRedirect'
 import PreloaderCSS from '../../Assets/Prelouder'
 import NoItems from '../NoItems/NoItems';
+import {withErrorHandle} from '../../HOC/withErrorHandle'
+import Success from '../Success/Success';
 
 
 SwiperCore.use([Navigation]);
 
 
-
 const Upload = (props) => {
 
   const [preloader, setPreloader] = React.useState(0);
+  const [success, setSuccess] = React.useState(false);
 
-  React.useEffect(() => {
+
+  React.useEffect(() => { // USE EFFECT
     props.setUploadedItemsThunk(props.uploadedId);
     setTimeout(() => { setPreloader(1) }, 2000);
     return () => {
       props.clearDogsThunk();
     }
+  }, [success])
 
-  }, [])
 
-
-  const UploadImg = async (e) => {
+  const UploadImg = async (e) => { // UPLOAD CALLBACK
     if (e.target.files.length) {
       const file = e.target.files[0];
-      props.uploadImgThunk(file, props.uid);
+      await props.uploadImgThunk(file, props.uid);
+      setSuccess(true);
     }
+  }
+
+
+  if(success) {
+    return <Success setSuccess={setSuccess} success={success}/>
   }
 
 
@@ -42,7 +50,6 @@ const Upload = (props) => {
   return (<div сlassName={s.wrapper}>
 
     <h3 className={s.scroll_title}>Here you can post your doggy 🐶 </h3>
-
 
     {props.dogs.length? (<div className={s.scroll}>
       <Swiper
@@ -63,19 +70,16 @@ const Upload = (props) => {
               <button className={s.thumbUp + ' ' + (props.likedDogsId.some(elem => elem === u.id) ? s.thumbUpActive : '')}
                 onClick={() => { props.likedDogsId.some(elem => elem === u.id) ? console.log('you liked it') : props.createVoteThunk(u.id, 1, props.uid) }}>{"\uD83D\uDC4D"}</button>
             </div>
-
           </div>
         </SwiperSlide>))}
 
       </Swiper>
     </div>) : <NoItems/>}
 
-
     <div className={s.fetch_button} >
       <input type={"file"} onChange={UploadImg} accept={"image/*"} id={"file"} />
       <label for="file">Post a dog photo 📷</label>
     </div>
-
 
   </div>)
 }
@@ -83,13 +87,15 @@ const Upload = (props) => {
 const mapStateToProps = (state) => ({
   dogs: state.photosReducer.dogs,
   uid: state.authReducer.userId,
-  uploadedId: state.photosReducer.uploadedId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
-  likedDogsId: state.photosReducer.likedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
-  dislikedDogsId: state.photosReducer.dislikedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) == pos; }),
+  uploadedId: state.photosReducer.uploadedId.filter((item, pos, arr) => { return arr.indexOf(item) === pos; }),
+  likedDogsId: state.photosReducer.likedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) === pos; }),
+  dislikedDogsId: state.photosReducer.dislikedDogsId.filter((item, pos, arr) => { return arr.indexOf(item) === pos; }),
   votesId: state.photosReducer.votesId,
+  currentError: state.photosReducer.currentError
 })
 
 export default compose(
   withLoginRedirect,
+  withErrorHandle,
   connect(mapStateToProps, { clearDogsThunk, createVoteThunk, setAllVotesIdThunk, uploadImgThunk, setUploadedItemsThunk })
 )(Upload)

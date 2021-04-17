@@ -1,0 +1,27 @@
+.errorBlock{
+    position: absolute;
+    top: 30%;
+    left: 52%;
+    transform: scale(1.5);
+    color: red;
+}
+
+.errorImg img{
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.errorOk{
+    border-radius: 0.5em;
+    border:1px solid black;
+    margin: 2em auto;
+    text-align: center;
+    background-color: #F8EA8C;
+    cursor: pointer;
+    width: 60%;
+    transition: 0.5s;
+}
+.errorOk:hover{
+    transform: scale(1.2);
+}
