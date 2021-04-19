@@ -10,6 +10,7 @@ import { getDogsThunk, clearDogsThunk, createVoteThunk} from '../../../Redux/pho
 import { withLoginRedirect } from '../../../HOC/withRedirect'
 import PreloaderCSS from '../../../Assets/Prelouder'
 import {withErrorHandle} from '../../../HOC/withErrorHandle'
+import Arrow from '../../ArrowBack/Arrow'
 
 
 SwiperCore.use([Navigation]);
@@ -38,6 +39,7 @@ const PhotoSlider = (props) => {
 
     return (<div сlassName={s.wrapper}>
 
+        <Arrow/>
         <h3 className={s.scroll_title}>Enjoy cool pictures of our doggies </h3>
         <div className={s.scroll}>
 

@@ -1,0 +1,9 @@
+.arrow{
+    font-size: 3em;
+    position: fixed;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.arrow:hover{
+    transform: scale(1.1);
+}

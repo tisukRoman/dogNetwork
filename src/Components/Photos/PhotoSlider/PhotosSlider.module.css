@@ -1,3 +1,4 @@
+
 .img{
     max-width: 100%;
     max-height: 60%;
@@ -16,7 +17,7 @@
     height: 30em;
     width: 30em;
     background-color: #B4F8C8;
-    border: 2px solid black;
+    border: 3px solid black;
     border-radius: 1em;
     margin: 0 auto;
 }

@@ -12,6 +12,7 @@ import PreloaderCSS from '../../Assets/Prelouder'
 import NoItems from '../NoItems/NoItems';
 import {withErrorHandle} from '../../HOC/withErrorHandle'
 import Success from '../Success/Success';
+import Arrow from '../ArrowBack/Arrow';
 
 
 SwiperCore.use([Navigation]);
@@ -48,7 +49,7 @@ const Upload = (props) => {
 
 
   return (<div сlassName={s.wrapper}>
-
+<Arrow/>
     <h3 className={s.scroll_title}>Here you can post your doggy 🐶 </h3>
 
     {props.dogs.length? (<div className={s.scroll}>
